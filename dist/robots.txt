@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sufarwee.github.io/myprofile//sitemap.xml
+
+AI-Readable-Resume: https://sufarwee.github.io/myprofile//reader/
+AI-Readable-Resume-Markdown-TH: https://sufarwee.github.io/myprofile//resume.th.md
+AI-Readable-Resume-Markdown-EN: https://sufarwee.github.io/myprofile//resume.en.md
