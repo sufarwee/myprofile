@@ -1,0 +1,85 @@
+---
+import Tracking from "../components/Tracking.astro";
+import { absoluteUrl, alternateLinks, personSchema, profile, routeGroups, site, type Locale } from "../data/profile";
+import "../styles/global.css";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const p = profile[locale];
+const canonical = absoluteUrl(p.url);
+const htmlLang = locale === "th" ? "th" : "en";
+const readerPath = routeGroups.reader[locale];
+const markdownPath = routeGroups.markdown[locale];
+const visualAlternates = alternateLinks("resume");
+---
+
+<!doctype html>
+<html lang={htmlLang} data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{p.title}</title>
+    <meta name="description" content={p.description} />
+    <meta name="keywords" content={p.keywords} />
+    <meta name="author" content={site.name} />
+    <meta name="application-name" content={site.siteTitle} />
+    <meta name="apple-mobile-web-app-title" content={site.shortName} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href={canonical} />
+    {visualAlternates.map((alternate) => <link rel="alternate" hreflang={alternate.hreflang} href={alternate.href} />)}
+    <link rel="alternate" type="text/markdown" title={locale === "th" ? "Markdown resume ภาษาไทย" : "English markdown resume"} href={absoluteUrl(markdownPath)} />
+    <link rel="alternate" type="text/html" title="Reader mode" href={absoluteUrl(readerPath)} />
+    <link rel="icon" href={site.logoSvg} type="image/svg+xml" />
+    <link rel="icon" href={site.logoPng} sizes="512x512" type="image/png" />
+    <link rel="apple-touch-icon" href={site.appleTouchIcon} />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)" />
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content={p.title} />
+    <meta property="og:description" content={p.description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={site.siteTitle} />
+    <meta property="og:image" content={absoluteUrl(site.socialImage)} />
+    <meta property="og:image:alt" content={`${site.name} brand mark`} />
+    <meta property="og:locale" content={locale === "th" ? "th_TH" : "en_US"} />
+    <meta property="og:locale:alternate" content={locale === "th" ? "en_US" : "th_TH"} />
+    <meta property="profile:first_name" content="Sufarwee" />
+    <meta property="profile:last_name" content="Dunyamat" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={p.title} />
+    <meta name="twitter:description" content={p.description} />
+    <meta name="twitter:image" content={absoluteUrl(site.socialImage)} />
+    {site.googleSiteVerification ? <meta name="google-site-verification" content={site.googleSiteVerification} /> : null}
+    {site.bingSiteVerification ? <meta name="msvalidate.01" content={site.bingSiteVerification} /> : null}
+    {site.yandexVerification ? <meta name="yandex-verification" content={site.yandexVerification} /> : null}
+    {site.facebookDomainVerification ? <meta name="facebook-domain-verification" content={site.facebookDomainVerification} /> : null}
+    <script is:inline>
+      const savedTheme = localStorage.getItem("theme");
+      const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+      document.documentElement.dataset.theme = savedTheme || (prefersLight ? "light" : "dark");
+    </script>
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(personSchema(locale))} />
+    <Tracking />
+  </head>
+  <body>
+    {site.gtmId.includes("XXXX") ? null : (
+      <noscript>
+        <iframe src={`https://www.googletagmanager.com/ns.html?id=${site.gtmId}`} height="0" width="0" style="display:none;visibility:hidden"></iframe>
+      </noscript>
+    )}
+    <slot />
+    <script is:inline>
+      const themeButton = document.querySelector("[data-theme-toggle]");
+      themeButton?.addEventListener("click", () => {
+        const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+        document.documentElement.dataset.theme = next;
+        localStorage.setItem("theme", next);
+      });
+    </script>
+  </body>
+</html>

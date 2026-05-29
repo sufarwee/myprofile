@@ -1,0 +1,318 @@
+---
+import { knowledgeTerms, primaryNavigation, profile, routeGroups, site, type Locale } from "../data/profile";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const p = profile[locale];
+const alternateHref = p.alternateUrl;
+const readerHref = routeGroups.reader[locale];
+const markdownHref = routeGroups.markdown[locale];
+const navItems = primaryNavigation(locale);
+const certificateSliderImages = p.certificateImages.slice(0, 18);
+
+const iconMap: Record<string, string> = {
+  code: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8 4 12l4 4M16 8l4 4-4 4M14 4l-4 16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/></svg>`,
+  search: `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4 4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"/></svg>`,
+  chart: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19V9M12 19V5M19 19v-8" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"/><path d="M4 19h16" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"/></svg>`,
+  server: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="6" rx="1.8" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="4" y="13" width="16" height="6" rx="1.8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 8h.01M8 16h.01" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2.2"/></svg>`,
+  spark: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1.8"/></svg>`,
+  badge: `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m9.5 13.5-1 6 3.5-2 3.5 2-1-6" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1.8"/></svg>`
+};
+
+const storyIcons = ["code", "chart", "search"];
+const serviceIcons = ["search", "chart", "spark", "badge", "server", "code"];
+---
+
+<header class="site-header">
+  <a class="brand" href={p.url} aria-label="Sufarwee Dunyamat resume">
+    <span class="brand-mark">SD</span>
+    <span>Sufarwee</span>
+  </a>
+  <nav aria-label="Primary navigation">
+    {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+  </nav>
+  <div class="header-actions">
+    <a class="small-link" href={alternateHref} rel="alternate" hreflang={locale === "th" ? "en" : "th"} lang={locale === "th" ? "en" : "th"}>{p.languageLabel}</a>
+    <a class="small-link" href={readerHref}>Reader</a>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle dark and light mode">
+      <span class="sun" aria-hidden="true">Light</span>
+      <span class="moon" aria-hidden="true">Dark</span>
+    </button>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="profile">
+    <div class="hero-copy">
+      <p class="eyebrow">{p.eyebrow}</p>
+      <h1>{p.headline}</h1>
+      <p class="summary">{p.summary}</p>
+      <div class="hero-actions">
+        <a class="button primary" href={site.linkedin} rel="me noopener noreferrer" target="_blank">{p.primaryCta}</a>
+        <a class="button secondary" href={site.googleDeveloper} rel="me noopener noreferrer" target="_blank">{p.secondaryCta}</a>
+      </div>
+    </div>
+    <aside class="hero-panel narrative-card" aria-label="Career snapshot">
+      <p class="panel-kicker">SEO Operations Snapshot</p>
+      <div class="metric-row">
+        <span>{p.seoLabel}</span>
+        <strong>{p.years}</strong>
+      </div>
+      <div class="metric-row">
+        <span>{p.speedLabel}</span>
+        <strong>{p.speedValue}</strong>
+      </div>
+      <div class="metric-row">
+        <span>{p.cloudLabel}</span>
+        <strong>{p.cloudValue}</strong>
+      </div>
+      <div class="mini-proof">
+        <span>SEO Developer</span>
+        <span>SEM + Google Ads</span>
+        <span>AI Automation</span>
+        <span>Cloud Server 0-100%</span>
+        <span>WordPress Expert</span>
+        <span>Echelon 2014</span>
+      </div>
+    </aside>
+  </section>
+
+  <section class="story-section" id="story" aria-labelledby="story-title">
+    <div class="section-heading">
+      <p class="eyebrow">{p.sectionTitles.story}</p>
+      <h2 id="story-title">{p.sectionHeadlines.story}</h2>
+    </div>
+    <div class="story-grid">
+      {p.story.map((item, index) => (
+        <article class="story-card">
+          <div class="card-head">
+            <span class="card-icon" set:html={iconMap[storyIcons[index] ?? "code"]} />
+          </div>
+          <span>{String(index + 1).padStart(2, "0")} / {item.label}</span>
+          <h3>{item.title}</h3>
+          <p>{item.text}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="band" id="skills">
+    <div class="section-heading">
+      <p class="eyebrow">{p.sectionTitles.expertise}</p>
+      <h2>{p.sectionHeadlines.expertise}</h2>
+    </div>
+    <div class="expertise-grid">
+      {p.expertise.map((item) => <article class="expertise-card"><p>{item}</p></article>)}
+    </div>
+  </section>
+
+  <section class="services-section" id="services">
+    <div class="section-heading">
+      <p class="eyebrow">{p.sectionTitles.services}</p>
+      <h2>{p.sectionHeadlines.services}</h2>
+    </div>
+    <div class="services-grid">
+      {p.services.map((item, index) => (
+        <article class="service-card">
+          <div class="card-head">
+            <span class="card-icon" set:html={iconMap[serviceIcons[index] ?? "search"]} />
+          </div>
+          <h3>{item.title}</h3>
+          <p>{item.text}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="stack-section" aria-labelledby="stack-title">
+    <div class="section-heading compact">
+      <p class="eyebrow">{p.sectionTitles.stack}</p>
+      <h2 id="stack-title">{p.sectionHeadlines.stack}</h2>
+    </div>
+    <div class="chip-cloud">
+      {p.stack.map((tool) => <span>{tool}</span>)}
+    </div>
+  </section>
+
+  <section class="timeline-section" id="experience">
+    <div class="section-heading">
+      <p class="eyebrow">{p.sectionTitles.experience}</p>
+      <h2>{p.sectionHeadlines.experience}</h2>
+    </div>
+    <div class="timeline">
+      {p.experience.map((item) => (
+        <article class="timeline-item">
+          <div>
+            <p class="period">{item.period}</p>
+            <h3>{item.role}</h3>
+            <p class="company">
+              {"companyUrl" in item && item.companyUrl ? (
+                <a href={item.companyUrl} target="_blank" rel="noopener noreferrer">{item.company}</a>
+              ) : (
+                item.company
+              )}
+            </p>
+          </div>
+          <ul>
+            {item.points.map((point) => <li>{point}</li>)}
+          </ul>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="awards-section" id="awards">
+    <div class="section-heading">
+      <p class="eyebrow">{p.sectionTitles.awards}</p>
+      <h2>{p.sectionHeadlines.awards}</h2>
+    </div>
+    <div class="award-list">
+      {p.awards.map((award, index) => (
+        <article>
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <strong>{award}</strong>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="cert-section" id="certifications">
+    <div class="section-heading">
+      <p class="eyebrow">{p.sectionTitles.certifications}</p>
+      <h2>{p.sectionHeadlines.certifications}</h2>
+    </div>
+    <div class="certificate-proof-marquee" aria-label={locale === "th" ? "สไลด์หลักฐานใบรับรองจริง" : "Real certificate proof slider"}>
+      {[0, 1].map((loopIndex) => (
+        <div class="certificate-proof-track" aria-hidden={loopIndex === 1 ? "true" : undefined}>
+          {certificateSliderImages.map((image) => (
+            <a
+              class="certificate-slide-card"
+              href={image.fullSrc ?? image.src}
+              target="_blank"
+              rel="noopener noreferrer"
+              tabindex={loopIndex === 1 ? "-1" : undefined}
+              aria-label={locale === "th" ? `เปิดภาพใบรับรองจริง: ${image.title}` : `Open real certificate proof: ${image.title}`}
+            >
+              <img src={image.src} alt={loopIndex === 1 ? "" : image.alt} loading="lazy" decoding="async" width="420" height="260" />
+              <span>{image.category}</span>
+              <strong>{image.title}</strong>
+            </a>
+          ))}
+        </div>
+      ))}
+    </div>
+    <div class="cert-grid">
+      {p.certifications.map((cert) => <article><span>Verified learning</span><strong>{cert}</strong></article>)}
+    </div>
+    <div class="certificate-list-grid">
+      {p.certificateCatalog.map((group) => (
+        <article class="certificate-list-card">
+          <h3>{group.title}</h3>
+          <ul>
+            {group.items.map((item) => <li>{item}</li>)}
+          </ul>
+        </article>
+      ))}
+    </div>
+    <details class="proof-details" open>
+      <summary>{locale === "th" ? "ใบรับรองแบบย่อ กดดูรายละเอียดได้" : "Compact certificate proof cards"}</summary>
+      <div class="certificate-gallery">
+        {p.certificateImages.map((image) => (
+          <figure class="certificate-proof-card">
+            <a
+              class="certificate-image-link"
+              href={image.fullSrc ?? image.src}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={locale === "th" ? `เปิดภาพใหญ่: ${image.title}` : `Open full certificate image: ${image.title}`}
+            >
+              <img src={image.src} alt={image.alt} loading="lazy" decoding="async" width="900" height="560" />
+              <span class="certificate-open-hint">{locale === "th" ? "คลิกดูภาพใหญ่" : "View full image"}</span>
+            </a>
+            <figcaption>
+              <span>{image.category ?? (locale === "th" ? "Certificate proof" : "Certificate proof")}</span>
+              <strong>{image.title}</strong>
+              <p class="certificate-short">{image.summary ?? image.description}</p>
+              <details class="certificate-more">
+                <summary>{locale === "th" ? "อ่านเพิ่ม" : "More context"}</summary>
+                <p>{image.description}</p>
+              </details>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </details>
+    <div class="profile-links" aria-label="Credential links">
+      <a href={site.googleSkills} rel="me noopener noreferrer" target="_blank">Google Skillshop</a>
+      <a href={site.credentials} rel="me noopener noreferrer" target="_blank">Credential Wallet</a>
+      <a href={site.hubspotSeo} rel="me noopener noreferrer" target="_blank">HubSpot SEO</a>
+      <a href={site.hubspotSeoII} rel="me noopener noreferrer" target="_blank">HubSpot SEO II</a>
+    </div>
+  </section>
+
+  <section class="kg-section" aria-labelledby="kg-title">
+    <div class="section-heading">
+      <p class="eyebrow">{p.sectionTitles.knowledgeGraph}</p>
+      <h2 id="kg-title">{p.sectionHeadlines.knowledgeGraph}</h2>
+    </div>
+    <div class="kg-grid">
+      {knowledgeTerms.map((term) => (
+        <article>
+          <h3>{term.name}</h3>
+          {"note" in term && <p class="kg-note">{term.note}</p>}
+          <div>
+            {term.sameAs.map((url) => (
+              <a href={url} rel="noopener noreferrer" target="_blank">{url.includes("wikidata") ? "Wikidata" : "Wikipedia"}</a>
+            ))}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="reviews-section" id="reviews">
+    <div class="section-heading">
+      <p class="eyebrow">{p.sectionTitles.reviews}</p>
+      <h2>{p.sectionHeadlines.reviews}</h2>
+    </div>
+    <div class="reviews-grid">
+      {p.reviews.map((review) => (
+        <article class="review-card">
+          <div class="stars" aria-label="5 out of 5">★★★★★</div>
+          <h3>{review.title}</h3>
+          <p>
+            {review.quote.split("\n").map((line, index) => (
+              <>
+                {index > 0 && <br />}
+                <span class={index === 0 ? "review-lead" : undefined}>{line}</span>
+              </>
+            ))}
+          </p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="contact-section">
+    <div>
+      <p class="eyebrow">{p.sectionTitles.contact}</p>
+      <h2>{site.name}</h2>
+      <p>{p.contactNote}</p>
+    </div>
+    <div class="contact-links">
+      <a href={site.linkedin} rel="me noopener noreferrer" target="_blank">LinkedIn</a>
+      <a href={site.xProfile} rel="me noopener noreferrer" target="_blank">X</a>
+      <a href={site.googleDeveloper} rel="me noopener noreferrer" target="_blank">g.dev/sufarwee</a>
+      <a href={site.googleSkills} rel="me noopener noreferrer" target="_blank">Google Skills</a>
+      <a href={readerHref}>Reader Mode</a>
+      <a href={markdownHref}>Markdown</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>© {new Date().getFullYear()} Sufarwee Dunyamat. Static Astro resume built for speed, schema and search clarity.</p>
+</footer>

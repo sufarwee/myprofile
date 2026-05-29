@@ -1,0 +1,22 @@
+---
+import { site } from "../data/profile";
+
+const hasGtm = !site.gtmId.includes("XXXX");
+---
+
+{hasGtm && (
+  <>
+    <script is:inline define:vars={{ gtmId: site.gtmId }}>
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+      (function(d, s, l, i) {
+        var f = d.getElementsByTagName(s)[0];
+        var j = d.createElement(s);
+        var dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(document, "script", "dataLayer", gtmId);
+    </script>
+  </>
+)}

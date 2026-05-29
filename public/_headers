@@ -1,0 +1,13 @@
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src https://www.googletagmanager.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+  Strict-Transport-Security: max-age=31536000
+
+/resume.th.md
+  Link: <https://example.com/resume.th.md>; rel="canonical", <https://example.com/resume.th.md>; rel="alternate"; hreflang="th", <https://example.com/resume.en.md>; rel="alternate"; hreflang="en", <https://example.com/resume.th.md>; rel="alternate"; hreflang="x-default"
+
+/resume.en.md
+  Link: <https://example.com/resume.en.md>; rel="canonical", <https://example.com/resume.th.md>; rel="alternate"; hreflang="th", <https://example.com/resume.en.md>; rel="alternate"; hreflang="en", <https://example.com/resume.th.md>; rel="alternate"; hreflang="x-default"

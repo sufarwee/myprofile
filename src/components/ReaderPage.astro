@@ -1,0 +1,100 @@
+---
+import { knowledgeTerms, profile, site, type Locale } from "../data/profile";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const p = profile[locale];
+const markdownPath = locale === "th" ? "/resume.th.md" : "/resume.en.md";
+const visualPath = p.url;
+---
+
+<main class="reader">
+  <header>
+    <p class="kicker">Reader Mode / AI-readable Resume</p>
+    <h1>{site.name}</h1>
+    <p class="lede">{p.headline}</p>
+    <nav aria-label="Reader links">
+      <a href={visualPath}>Visual resume</a>
+      <a href={markdownPath}>Markdown</a>
+      <a href={site.linkedin} rel="me noopener noreferrer" target="_blank">LinkedIn</a>
+      <a href={site.googleDeveloper} rel="me noopener noreferrer" target="_blank">Google Developer</a>
+    </nav>
+  </header>
+
+  <article>
+    <section>
+      <h2>Summary</h2>
+      <p>{p.summary}</p>
+    </section>
+
+    <section>
+      <h2>{p.sectionTitles.story}</h2>
+      {p.story.map((item) => (
+        <section>
+          <h3>{item.title}</h3>
+          <p>{item.text}</p>
+        </section>
+      ))}
+    </section>
+
+    <section>
+      <h2>{p.sectionTitles.expertise}</h2>
+      <ul>{p.expertise.map((item) => <li>{item}</li>)}</ul>
+    </section>
+
+    <section>
+      <h2>{p.sectionTitles.stack}</h2>
+      <ul>{p.stack.map((item) => <li>{item}</li>)}</ul>
+    </section>
+
+    <section>
+      <h2>{p.sectionTitles.experience}</h2>
+      {p.experience.map((item) => (
+        <section>
+          <h3>
+            {item.role} | {"companyUrl" in item && item.companyUrl ? (
+              <a href={item.companyUrl}>{item.company}</a>
+            ) : (
+              item.company
+            )}
+          </h3>
+          <p><strong>{item.period}</strong></p>
+          <ul>{item.points.map((point) => <li>{point}</li>)}</ul>
+        </section>
+      ))}
+    </section>
+
+    <section>
+      <h2>{p.sectionTitles.awards}</h2>
+      <ul>{p.awards.map((item) => <li>{item}</li>)}</ul>
+    </section>
+
+    <section>
+      <h2>{p.sectionTitles.certifications}</h2>
+      <ul>{p.certifications.map((item) => <li>{item}</li>)}</ul>
+    </section>
+
+    <section>
+      <h2>{p.sectionTitles.knowledgeGraph}</h2>
+      <ul>
+        {knowledgeTerms.map((term) => (
+          <li>{term.name}: {term.sameAs.join(", ")}</li>
+        ))}
+      </ul>
+    </section>
+
+    <section>
+      <h2>{p.sectionTitles.contact}</h2>
+      <ul>
+        <li>LinkedIn: <a href={site.linkedin}>{site.linkedin}</a></li>
+        <li>X: <a href={site.xProfile}>{site.xProfile}</a></li>
+        <li>Google Developer: <a href={site.googleDeveloper}>{site.googleDeveloper}</a></li>
+        <li>Google Skillshop: <a href={site.googleSkills}>{site.googleSkills}</a></li>
+        <li>Credential Wallet: <a href={site.credentials}>{site.credentials}</a></li>
+      </ul>
+    </section>
+  </article>
+</main>

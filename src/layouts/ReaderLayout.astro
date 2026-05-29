@@ -1,0 +1,46 @@
+---
+import { absoluteUrl, alternateLinks, personSchema, profile, routeGroups, site, type Locale } from "../data/profile";
+import "../styles/reader.css";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const p = profile[locale];
+const htmlLang = locale === "th" ? "th" : "en";
+const readerPath = routeGroups.reader[locale];
+const markdownPath = routeGroups.markdown[locale];
+const readerAlternates = alternateLinks("reader");
+---
+
+<!doctype html>
+<html lang={htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{site.name} Reader Mode | {locale === "th" ? "ภาษาไทย" : "English"}</title>
+    <meta name="description" content={`Reader mode for ${p.description}`} />
+    <meta name="robots" content="index, follow" />
+    <meta name="application-name" content={site.siteTitle} />
+    <link rel="canonical" href={absoluteUrl(readerPath)} />
+    {readerAlternates.map((alternate) => <link rel="alternate" hreflang={alternate.hreflang} href={alternate.href} />)}
+    <link rel="alternate" type="text/markdown" title={locale === "th" ? "Markdown resume ภาษาไทย" : "English markdown resume"} href={absoluteUrl(markdownPath)} />
+    <link rel="alternate" type="text/html" title="Visual resume" href={absoluteUrl(p.url)} />
+    <link rel="icon" href={site.logoSvg} type="image/svg+xml" />
+    <link rel="icon" href={site.logoPng} sizes="512x512" type="image/png" />
+    <link rel="apple-touch-icon" href={site.appleTouchIcon} />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content={`${site.name} Reader Mode`} />
+    <meta property="og:description" content={`Reader mode for ${p.description}`} />
+    <meta property="og:url" content={absoluteUrl(readerPath)} />
+    <meta property="og:image" content={absoluteUrl(site.socialImage)} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content={absoluteUrl(site.socialImage)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(personSchema(locale))} />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
