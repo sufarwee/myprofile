@@ -2,7 +2,7 @@ import { defineConfig } from "astro/config";
 
 export default defineConfig({
   site: "https://sufarwee.github.io",
-  base: "myprofile",
+  base: "/myprofile",
   output: "static",
   build: {
     inlineStylesheets: "auto",
