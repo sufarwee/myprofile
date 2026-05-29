@@ -9,10 +9,10 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^4.0.0"
+    "astro": "latest"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.3.0",
-    "typescript": "^5.0.0"
+    "@astrojs/check": "latest",
+    "typescript": "latest"
   }
 }
