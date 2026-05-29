@@ -190,7 +190,7 @@ const serviceIcons = ["search", "chart", "spark", "badge", "server", "code"];
           {certificateSliderImages.map((image) => (
             <a
               class="certificate-slide-card"
-             href={image.fullSrc ? `${import.meta.env.BASE_URL}${image.fullSrc}` : `${import.meta.env.BASE_URL}${image.src}`}
+              href={image.fullSrc ?? image.src}
               target="_blank"
               rel="noopener noreferrer"
               tabindex={loopIndex === 1 ? "-1" : undefined}
@@ -224,7 +224,7 @@ const serviceIcons = ["search", "chart", "spark", "badge", "server", "code"];
           <figure class="certificate-proof-card">
             <a
               class="certificate-image-link"
-              href={image.fullSrc ? `${import.meta.env.BASE_URL}${image.fullSrc}` : `${import.meta.env.BASE_URL}${image.src}`}
+              href={image.fullSrc ?? image.src}
               target="_blank"
               rel="noopener noreferrer"
               aria-label={locale === "th" ? `เปิดภาพใหญ่: ${image.title}` : `Open full certificate image: ${image.title}`}
